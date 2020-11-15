@@ -103,10 +103,13 @@ module(Element, Options) ->
                stylesheet,
                index_columns,
                sort_functions,
-               pretty_printer}).
+               pretty_printer,
+	       function_index}).
 
 init_opts(Element, Options) ->
     R = #opts{root = get_attrval(root, Element),
+	      function_index = proplists:get_value(function_index,
+						  Options, true),
 	      index_columns = proplists:get_value(index_columns,
 						  Options, 1),
 	      sort_functions = proplists:get_value(sort_functions,
@@ -202,7 +205,7 @@ layout_module(#xmlElement{name = module, content = Es}=E, Opts) ->
 			   | RestDesc]
 	       end
 	    ++ types(lists:sort(Types), Opts)
-	    ++ function_index(SortedFs, Opts#opts.index_columns)
+	    ++ function_index(SortedFs, Opts)
 	    ++ functions(SortedFs, Opts)),
 	    %% ++ navigation("bottom")
 	    %% ++ timestamp()),
@@ -346,7 +349,10 @@ doc_index_rows(FullDesc, Functions, Types) ->
 		    {?FUNCTIONS_TITLE, ?FUNCTIONS_LABEL}]
 	end).
 
-function_index(Fs, Cols) ->
+function_index(Fs, #opts{function_index = false}) ->
+    [];
+function_index(Fs, Opts) ->
+    Cols = Opts#opts.index_columns,
     case function_index_rows(Fs, Cols, []) of
 	[] -> [];
 	Rows ->
