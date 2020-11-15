@@ -541,7 +541,7 @@ types(Ts, Opts) ->
      ?NL | Es].
 
 typedecl(Name, E=#xmlElement{content = Es}, Opts) ->
-    ([?NL, label_anchor([Name, "()"], E), ?NL]
+    ([?NL, {a, [{name, [Name, "()"]}], []}]
      ++ [?NL, {h3, [{class, "typedecl"}], [Name, "()"]}, ?NL]
      ++ [{p, typedef(get_content(typedef, Es), Opts)}, ?NL]
      ++ fulldesc(Es)).
