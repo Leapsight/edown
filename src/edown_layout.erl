@@ -349,7 +349,7 @@ doc_index_rows(FullDesc, Functions, Types) ->
 		    {?FUNCTIONS_TITLE, ?FUNCTIONS_LABEL}]
 	end).
 
-function_index(Fs, #opts{function_index = false}) ->
+function_index(_, #opts{function_index = false}) ->
     [];
 function_index(Fs, Opts) ->
     Cols = Opts#opts.index_columns,
